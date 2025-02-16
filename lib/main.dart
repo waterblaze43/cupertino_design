@@ -32,7 +32,7 @@ class _MainAppState extends State<MainApp> {
   Widget build(BuildContext context) {
     return CupertinoApp(
       debugShowCheckedModeBanner: false,
-      theme: CupertinoThemeData(brightness: Brightness.dark),
+      theme: CupertinoThemeData(),
       home: Home(),
     );
   }
@@ -58,6 +58,7 @@ class Home extends StatelessWidget {
                 children: [
                   Text("Drag Here"),
                   CupertinoButton.filled(
+                    sizeStyle: CupertinoButtonSize.medium,
                     onPressed: () {
                       Navigator.push(
                         context,
@@ -100,7 +101,96 @@ class About extends StatelessWidget {
             child: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [Text("this is the About")],
+                children: [
+                  SizedBox(
+                    height: 100,
+                    width: 100,
+                    child: CupertinoContextMenu(
+                      enableHapticFeedback: true,
+                      actions: [
+                        CupertinoContextMenuAction(
+                          isDefaultAction: true,
+                          trailingIcon: CupertinoIcons.clear,
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text("Close"),
+                        ),
+                        CupertinoContextMenuAction(
+                          isDestructiveAction: true,
+                          trailingIcon: CupertinoIcons.delete,
+                          onPressed: () {
+                            Navigator.pop(context);
+                            showCupertinoDialog(
+                              context: context,
+                              builder:
+                                  (context) => CupertinoAlertDialog(
+                                    title: Text("Delete?"),
+                                    content: Text(
+                                      "Do you want to delete this?",
+                                    ),
+                                    actions: [
+                                      CupertinoDialogAction(
+                                        isDefaultAction: true,
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: Text("No"),
+                                      ),
+                                      CupertinoDialogAction(
+                                        isDestructiveAction: true,
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: Text("Yes"),
+                                      ),
+                                    ],
+                                  ),
+                            );
+                          },
+                          child: Text("Delete"),
+                        ),
+                      ],
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(7),
+                        child: ColoredBox(
+                          color: CupertinoColors.activeBlue,
+                          child: FlutterLogo(size: 160),
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  CupertinoButton.tinted(
+                    sizeStyle: CupertinoButtonSize.medium,
+                    onPressed: () {
+                      showCupertinoModalPopup(
+                        context: context,
+                        builder:
+                            (context) => CupertinoActionSheet(
+                              title: Text("Share"),
+                              message: Text("Do you want To share this?"),
+                              cancelButton: CupertinoActionSheetAction(
+                                isDestructiveAction: true,
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Text("Cancel"),
+                              ),
+                              actions: [
+                                CupertinoActionSheetAction(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text("Share"),
+                                ),
+                              ],
+                            ),
+                      );
+                    },
+                    child: Text("Click Me"),
+                  ),
+                ],
               ),
             ),
           ),
